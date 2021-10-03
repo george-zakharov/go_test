@@ -2,18 +2,24 @@ package main
 
 import (
 	"fmt"
+	"time"
+	"math/rand"
 )
 
-func main() {
-	ch1 := make(chan int, 1)
-	ch2 := make(chan int)
-	ch1 <- 1
-	select {
-	case val := <-ch1:
-		fmt.Println("ch1 val", val)
-	case ch2 <- 1:
-		fmt.Println("put val to ch2")
-	default:
-		fmt.Println("default case")
+func f(n int) {
+	for i := 0; i < 10; i++ {
+		fmt.Println(n, ":", i)
+		amt := time.Duration(rand.Intn(250))
+		time.Sleep(time.Millisecond * amt)
 	}
+}
+
+func main() {
+	for i := 0; i < 10; i++ {
+		go f(i)
+	}
+	
+	var input string
+	fmt.Scanln(&input)
+	fmt.Println("Got input: " + input)
 }
