@@ -53,7 +53,7 @@ type Search struct {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.Execute(w, nil)
-	//w.Write([]byte("<h1>Hello World1111!</h1>"))
+	//w.Write([]byte("<h1>Hello World1111!</h1>")) // TODO: FOR TEST
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
@@ -107,6 +107,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	err = tpl.Execute(w, search)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -128,7 +129,7 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	mux.HandleFunc("/search", searchHandler)
 	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/search", searchHandler)
 	http.ListenAndServe(":"+port, mux)
 }
